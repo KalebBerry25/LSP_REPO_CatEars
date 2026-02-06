@@ -20,7 +20,7 @@ public class ETLPipeline {
 
     /**
  *  This looks for "data/products.csv" as input and writes to "data/transformed_products.csv" as output.
- *  It looks fpr these relative to the current working directory and will create the output file there as well
+ *  It looks for these relative to the current working directory and will create the output file there as well
     */
     private static final Path INPUT_PATH = Paths.get("data", "products.csv");
     private static final Path OUTPUT_PATH = Paths.get("data", "transformed_products.csv");
@@ -31,25 +31,25 @@ public class ETLPipeline {
         int rowsSkipped = 0;
 
 
-        /**
- * Exit if input file does not exist
- */
+    /**
+     * Exit if input file does not exist
+     */
         if (!Files.exists(INPUT_PATH)) {
             System.out.println("Error: Missing input file: " + INPUT_PATH.toString());
             return; 
         }
 
         try {
-        /**
- * Create output directory if it doesn't exist
- */
+    /**
+     * Create output directory if it doesn't exist
+     */
             if (OUTPUT_PATH.getParent() != null) {
                 Files.createDirectories(OUTPUT_PATH.getParent());
             }
 
-            /**
- * Initialize readers and writers i/o streams
- */
+     /**
+     * Initialize readers and writers i/o streams
+     */
             try (BufferedReader reader = Files.newBufferedReader(INPUT_PATH, StandardCharsets.UTF_8);
                  BufferedWriter writer = Files.newBufferedWriter(OUTPUT_PATH, StandardCharsets.UTF_8)) {
 
@@ -58,9 +58,9 @@ public class ETLPipeline {
                 writer.write("ProductID,Name,Price,Category,PriceRange");
                 writer.newLine();
 
-                /**
- * If header is missing, treat as empty file (0 rows read) and exit with summary
- */
+    /**
+     * If header is missing, treat as empty file (0 rows read) and exit with summary
+     */
                 if (header == null) {
                     printSummary(rowsRead, rowsTransformed, rowsSkipped, OUTPUT_PATH);
                     return;
@@ -70,9 +70,9 @@ public class ETLPipeline {
                 while ((line = reader.readLine()) != null) {
                     rowsRead++;
 
-                    /**
- * Checks for empty lines, incorrect rows and unparseable product ids to skip
- */
+    /**
+     * Checks for empty lines, incorrect rows and unparseable product ids to skip
+     */
                     if (line.trim().isEmpty()) {
                         rowsSkipped++;
                         continue;
@@ -103,13 +103,13 @@ public class ETLPipeline {
 
                     
 
-                    // 1) Name -> UPPERCASE
+                    // Name -> UPPERCASE
                     String transformedName = name.toUpperCase(Locale.ROOT);
 
-                    // Keep original category for rule #3
+                    // Keep original category for later check
                     String originalCategory = category;
 
-                    // 2) If category is "Electronics", apply 10% discount
+                    // If category is "Electronics", apply 10% discount
                     BigDecimal transformedPrice = price;
                     if ("Electronics".equals(category)) {
                         transformedPrice = transformedPrice.multiply(new BigDecimal("0.90"));
@@ -118,20 +118,20 @@ public class ETLPipeline {
                     // Round price 
                     transformedPrice = transformedPrice.setScale(2, RoundingMode.HALF_UP);
 
-                    // 3) If final rounded price > 500.00 AND original category was "Electronics",
-                    //    change category to "Premium Electronics"
+                    // If final rounded price > 500.00 AND original category was "Electronics",
+                    //   change category to "Premium Electronics"
                     String transformedCategory = category;
                     if ("Electronics".equals(originalCategory)
                             && transformedPrice.compareTo(new BigDecimal("500.00")) > 0) {
                         transformedCategory = "Premium Electronics";
                     }
 
-                    // 4) Add PriceRange based on final rounded price
+                    //Add PriceRange based on final rounded price
                     String priceRange = determinePriceRange(transformedPrice);
 
-                    /**
- * Writes transformed data to output file
- */
+                /**
+                 * Writes transformed data to output file
+                 */
                     writer.write(productId + "," +
                             transformedName + "," +
                             formatTwoDecimals(transformedPrice) + "," +
@@ -161,8 +161,10 @@ public class ETLPipeline {
         return "Premium";
     }
 
+/**
+ *Returns a string representation of a BigDecimal rounded to two decimal places
+ */
     private static String formatTwoDecimals(BigDecimal value) {
-        // Ensure exactly two decimal places in output
         return value.setScale(2, RoundingMode.HALF_UP).toPlainString();
     }
 
