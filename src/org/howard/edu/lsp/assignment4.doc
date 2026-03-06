@@ -24,6 +24,7 @@ Assumptions:
 
 * The transponder uses the high-density packet format
 
+
 Class: Aircraft
 
 Responsibilities:
@@ -88,6 +89,7 @@ Assumptions:
 
 * The database is the primary source of stored aircraft information
 
+
 Class: ComputerGraphicsDisplay
 
 Responsibilities:
@@ -116,6 +118,7 @@ Assumptions:
 * The display refresh interval is fixed at 10 seconds
 
 * Each aircraft should be mapped to a unique aircraft record
+
 
 Class: DangerDetector
 
