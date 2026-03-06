@@ -1,0 +1,192 @@
+Kaleb Berry
+CSCI 540
+Assignment 4
+
+Class: Transponder
+
+Responsibilities:
+
+* Pack aircraft type into transmission packets
+
+* Pack flight data into transmission packets
+
+* Transmit encoded packets to the ground station
+
+Collaborators:
+
+* Aircraft
+
+* GroundStationReceiver
+
+Assumptions:
+
+* Each arriving aircraft has at least one transponder
+
+* The transponder uses the high-density packet format
+
+Class: Aircraft
+
+Responsibilities:
+
+* Collect current aircraft status data
+
+* Provide aircraft type and flight data to the transponder
+
+Collaborators:
+
+* Transponder
+
+Assumptions:
+
+* Aircraft status data has the information the ATC system needs
+
+* Actual flight operations aren’t needed in this ATC design
+
+
+
+
+Class: GroundStationReceiver
+
+Responsibilities:
+
+* Receive transponder broadcasts from arriving aircraft
+
+* Unpack aircraft type and flight data from received packets
+
+* Forward decoded aircraft data to the database
+
+Collaborators:
+
+* Transponder
+
+* AircraftDatabase
+
+Assumptions:
+
+* All arriving aircraft transmit the correct type of packets
+
+* Receiving and decoding the packets are handled together
+
+
+Class: AircraftDatabase
+
+Responsibilities:
+
+* Store aircraft records
+
+* Update aircraft records with new flight data
+
+* Retrieve aircraft records on request
+
+Collaborators:
+
+* None
+
+Assumptions:
+
+* Each tracked aircraft has a unique identifier
+
+* The database is the primary source of stored aircraft information
+
+Class: ComputerGraphicsDisplay
+
+Responsibilities:
+
+* Build the graphical display from stored aircraft data
+
+* Refresh the display every 10 seconds
+
+* Show aircraft positions and summary flight data
+
+* Show alerts for dangerous situations
+
+* Allow controller selection of an aircraft on screen
+
+
+Collaborators:
+
+* AircraftDatabase
+
+* DangerDetector
+
+* AirTrafficController
+
+Assumptions:
+
+* The display refresh interval is fixed at 10 seconds
+
+* Each aircraft should be mapped to a unique aircraft record
+
+Class: DangerDetector
+
+Responsibilities:
+
+* Analyze stored flight data for dangerous situations
+
+* Detect aircraft conflicts and unsafe conditions
+
+* Generate alerts for display to the controller
+
+Collaborators:
+
+* AircraftDatabase
+
+* ComputerGraphicsDisplay
+
+
+Assumptions:
+
+* Detection rules are predefined by the ATC system
+
+* This class only flags the risk it should not make any decisions
+
+
+Class: AircraftQueryService
+
+Responsibilities:
+
+* Accept controller requests for aircraft details
+
+* Retrieve selected aircraft information from the database
+
+* Return detailed aircraft information for presentation
+
+
+Collaborators:
+
+* AirTrafficController
+
+* AircraftDatabase
+
+* ComputerGraphicsDisplay
+
+Assumptions:
+
+* Queries can’t be edited
+
+* A selected aircraft can be uniquely matched to its database record
+
+
+Class: AirTrafficController
+
+Responsibilities:
+
+* Monitor aircraft information on the display
+
+* Review displayed danger alerts
+
+* Request detailed information about a selected aircraft
+
+* Makle decisions based on aircraft information or flagged danger
+
+Collaborators:
+
+* ComputerGraphicsDisplay
+
+* AircraftQueryService
+
+Assumptions:
+
+* The controller interacts with the system through the display
+
+* Any extra aircraft detail requests are initiated by the user
