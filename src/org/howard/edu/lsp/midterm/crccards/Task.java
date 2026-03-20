@@ -4,7 +4,7 @@ package org.howard.edu.lsp.midterm.crccards;
  * Represents a task in the Task Management System.
  * A task stores its ID, description, and current status.
  *
- * Author: Kaleb Berry
+ * @author Kaleb Berry
  */
 public class Task {
     private String taskId;

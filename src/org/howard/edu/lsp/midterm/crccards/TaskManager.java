@@ -9,7 +9,7 @@ import java.util.Map;
  * Manages a collection of Task objects.
  * Supports adding tasks, finding tasks by ID, and retrieving tasks by status.
  *
- * Author: Kaleb Berry
+ * @author Kaleb Berry
  */
 public class TaskManager {
     private Map<String, Task> tasks;
