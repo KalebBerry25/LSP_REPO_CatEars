@@ -1,0 +1,7 @@
+The current `PriceCalculator` design works, but it is not very extendable or maintainable. The main issue is that all discount behavior is hardcoded inside one method using multiple `if` statements.If more customer types are added as the sytem grows it will become harder to maitain the code.
+
+This design also doesn't separate responsibilities. The class is responsible both for deciding which pricing rule applies and for performing all discount calculations itself. That means there is tight coupling between the calculator and every discount type. If a new discount category such as STUDENT or SEASONAL is introduced, the existing class must be modified.
+
+Another weakness is that the design does not follow the open/closed principle very well. The class is not closed for modification because every new pricing rule requires changing the source code of `PriceCalculator`, thus increasing the risk of introducing bugs.
+
+A better design is to use the Strategy Pattern. With this pattern, each discount rule is placed in its own class behind a common interface. `PriceCalculator` now can work with a pricing strategy object rather than a string-based chain of conditions. This makes the system easier to extend, test, and maintain.
